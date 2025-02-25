@@ -1,0 +1,42 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+module(
+    name = "examples",
+    version = "0.1",
+    compatibility_level = 0,
+)
+
+
+###############################################################################
+#
+# CC Rules - Add this section in MODULE.bazel enable Bazel Rules CC
+#
+###############################################################################
+bazel_dep(name = "rules_cc", version = "0.1.1")
+
+###############################################################################
+#
+# LLVM Toolchains - Add this section in MODULE.bazel enable LLVM Toolchain
+#
+###############################################################################
+bazel_dep(name = "toolchains_llvm", version = "1.2.0")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    cxx_standard = {"": "c++17"},
+    llvm_version = "19.1.0",
+)
+use_repo(llvm, "llvm_toolchain")
+use_repo(llvm, "llvm_toolchain_llvm")
+
+register_toolchains("@llvm_toolchain//:all")
